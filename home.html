@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Provedor de Internet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f7f9f9;
+            padding: 10px 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .location {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .phone-number {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .phone-number i {
+            color: #333;
+            font-size: 18px;
+        }
+
+        .phone-number a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .carousel-container {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            width: 33.333%;
+            height: 100%;
+            padding: 0 2%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 16px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .carousel-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: white;
+        }
+
+        .plans-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: nowrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .plan-card {
+            background-color: #4285f4;
+            color: white;
+            padding: 25px;
+            border-radius: 25px;
+            width: 320px;
+            min-height: 380px;
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .plan-type {
+            font-size: 16px;
+            margin-bottom: 25px;
+            letter-spacing: 1.2px;
+        }
+
+        .plan-speed {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .plan-price {
+            margin-bottom: 20px;
+        }
+
+        .currency {
+            font-size: 24px;
+            vertical-align: top;
+        }
+
+        .amount {
+            font-size: 38px;
+            font-weight: bold;
+        }
+
+        .period {
+            font-size: 20px;
+        }
+
+        .plan-info {
+            font-size: 14px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .plan-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .plan-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 1200px) {
+            .plans-container {
+                flex-wrap: wrap;
+            }
+
+            .plan-card {
+                width: 300px;
+            }
+        }
+
+        .plans-header {
+            text-align: center;
+            max-width: 1200px;
+            margin: 30px auto 10px;
+            padding: 0 20px;
+        }
+
+        .plans-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .plans-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: #4285f4;
+            border-radius: 2px;
+        }
+
+        .plans-header p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.4;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .services-header {
+            text-align: center;
+            max-width: 1200px;
+            margin: 60px auto 30px;
+            padding: 0 20px;
+        }
+
+        .services-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .services-header p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            font-size: 24px;
+            color: #4285f4;
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .service-link {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #4285f4;
+            text-decoration: none;
+        }
+
+        .service-link i {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 60px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #4285f4;
+        }
+
+        .contact-info .phone-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #666;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #4285f4;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 0;
+        }
+
+        .footer-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-info p {
+            color: #666;
+            font-size: 12px;
+            margin: 2px 0;
+            text-align: left;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 12px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .footer-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .footer-links {
+                margin-top: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="location" id="selectedCity">Carregando...</div>
+        <div class="phone-number">
+            <i class="fab fa-whatsapp"></i>
+            <a href="https://wa.me/5586994575738">
+                (86) 9 9457-5738
+            </a>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="servicos.html">Serviços</a>
+            <a href="contato.html">Contato</a>
+        </div>
+    </nav>
+
+    <div class="carousel">
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <img src="slide1.jpg" alt="Promoção 1">
+            </div>
+            <div class="carousel-slide">
+                <img src="slide2.jpg" alt="Promoção 2">
+            </div>
+            <div class="carousel-slide">
+                <img src="slide3.jpg" alt="Promoção 3">
+            </div>
+        </div>
+        <button class="carousel-button prev">&#10094;</button>
+        <button class="carousel-button next">&#10095;</button>
+        <div class="carousel-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <div class="plans-header">
+        <h2>Conheça nossos planos</h2>
+        <p>Todos os nossos planos entregam o máximo desempenho com altíssima velocidade por fibra óptica.</p>
+    </div>
+
+    <div class="plans-container">
+        <div class="plan-card">
+            <div class="plan-type">INTERNET 100% FIBRA ÓTICA</div>
+            <div class="plan-speed">600 MB</div>
+            <div class="plan-price">
+                <span class="currency">R$</span>
+                <span class="amount">99,90</span>
+                <span class="period">/mês</span>
+            </div>
+            <div class="plan-info">SEM TAXA DE INSTALAÇÃO</div>
+            <button class="plan-button">Contrate agora</button>
+        </div>
+
+        <div class="plan-card">
+            <div class="plan-type">INTERNET 100% FIBRA ÓTICA</div>
+            <div class="plan-speed">300 MB</div>
+            <div class="plan-price">
+                <span class="currency">R$</span>
+                <span class="amount">79,90</span>
+                <span class="period">/mês</span>
+            </div>
+            <div class="plan-info">SEM TAXA DE INSTALAÇÃO</div>
+            <button class="plan-button">Contrate agora</button>
+        </div>
+    </div>
+
+    <div class="services-header">
+        <h2>Serviços para você</h2>
+        <p>Acesse sua fatura, entre em contato ou saiba mais sobre nossos serviços.</p>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card">
+            <i class="fab fa-whatsapp"></i>
+            <h3>WhatsApp</h3>
+            <p>Pague sua fatura via PIX, segunda via de boleto e muito mais</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="service-card">
+            <i class="far fa-newspaper"></i>
+            <h3>Últimas notícias</h3>
+            <p>Acesse nosso blog e confira as novidades e ações da Central Net</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Lojas</h3>
+            <p>Encontre nossa loja mais próxima de você</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-users"></i>
+            <h3>Entre para o time</h3>
+            <p>Cadastre-se no nosso banco de talentos e faça parte da família Central Net</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>App Central Net</h3>
+            <p>Baixe o app para Android e iOS para gerenciar sua internet</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="service-card">
+            <i class="fas fa-building"></i>
+            <h3>Central Net Empresas</h3>
+            <p>Confira nossas soluções exclusivas para empresas</p>
+            <a href="#" class="service-link">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Institucional</h3>
+                <ul>
+                    <li><a href="#">Sobre nós</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Aniversário Central Net</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Planos</h3>
+                <ul>
+                    <li><a href="#">Internet Fibra Óptica</a></li>
+                    <li><a href="#">Central Net Gamer Ultra</a></li>
+                    <li><a href="#">Central Net Gamer IP Dedicado</a></li>
+                    <li><a href="#">Para Empresas</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Cliente</h3>
+                <ul>
+                    <li><a href="#">Atendimento</a></li>
+                    <li><a href="#">Aplicativo Central Net</a></li>
+                    <li><a href="#">Central do Assinante</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-info">
+                    <a href="tel:0800186000" class="phone-link">
+                        <i class="fab fa-whatsapp"></i>
+                        0800 186 6000
+                    </a>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-info">
+                <img src="logo.png" alt="Central Net Logo" class="footer-logo">
+                <div class="footer-info-text">
+                    <p>Central Net Ltda. Todos os direitos reservados. CNPJ: 34.238.437/0001-80</p>
+                    <p>Rua Júlio Mendes, nº 50 - Fátima - Teresina/PI - CEP: 64059-130</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos e Contratos</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedCity = localStorage.getItem('selectedCity');
+            const cityElement = document.getElementById('selectedCity');
+            
+            if (selectedCity) {
+                cityElement.textContent = selectedCity;
+            } else {
+                window.location.href = 'index.html';
+            }
+
+            const container = document.querySelector('.carousel-container');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevButton = document.querySelector('.prev');
+            const nextButton = document.querySelector('.next');
+            let currentSlide = 0;
+
+            function updateSlide() {
+                container.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlide();
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                updateSlide();
+            }
+
+            prevButton.addEventListener('click', prevSlide);
+            nextButton.addEventListener('click', nextSlide);
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlide();
+                });
+            });
+
+            setInterval(nextSlide, 5000);
+        });
+    </script>
+</body>
+</html>
